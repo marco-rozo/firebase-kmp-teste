@@ -8,7 +8,7 @@ class ExpenseRepoImpl(private val expenseManager: ExpenseManager): ExpenseReposi
     override fun getAllExpense(): List<Expense> {
        return ExpenseManager.fakeExpenseList
     }
-    override fun addExpense(expense: Expense) {
+    override suspend fun addExpense(expense: Expense) {
         ExpenseManager.addNewExpense(expense)
     }
     override fun editExpense(expense: Expense) {
@@ -18,6 +18,7 @@ class ExpenseRepoImpl(private val expenseManager: ExpenseManager): ExpenseReposi
       return ExpenseManager.getCategories()
     }
     override suspend fun deleteExpense(expense: Expense) {
-       return ExpenseManager.deleteExpense(expense)
+        ExpenseManager.getCategories();
+        return ExpenseManager.deleteExpense(expense)
     }
 }

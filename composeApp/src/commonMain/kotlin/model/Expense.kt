@@ -8,14 +8,19 @@ import androidx.compose.material.icons.filled.ViewCozy
 import androidx.compose.material.icons.filled.ElectricCar
 import androidx.compose.material.icons.filled.House
 import androidx.compose.ui.graphics.vector.ImageVector
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
+@SerialName("OwnedProject")
 data class Expense(
     val id:Long = -1,
     val amount: Double,
     val category:ExpenseCategory,
     val description: String
 ) {
-    val icon = category.icon
+    val icon: ImageVector
+        get() = category.icon
 }
 
 enum class ExpenseCategory(val icon: ImageVector){
