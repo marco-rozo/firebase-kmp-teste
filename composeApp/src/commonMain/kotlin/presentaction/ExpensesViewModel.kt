@@ -1,8 +1,8 @@
 package presentaction
 
-import model.Expense
-import model.ExpenseCategory
-import domain.ExpenseRepository
+import data.model.Expense
+import data.model.ExpenseCategory
+import domain.repositories.ExpenseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -69,7 +69,8 @@ class ExpensesViewModel(private val repo: ExpenseRepository) : ViewModel() {
     }
 
     fun getExpenseWithID(id: Long): Expense? {
-        return (_uiState.value as? ExpensesUiState.Success)?.expenses?.firstOrNull { it.id == id }
+        //TODO REFAZER
+        return (_uiState.value as? ExpensesUiState.Success)?.expenses?.firstOrNull { it.id == "" }
     }
 
      fun getCategories(): List<ExpenseCategory> {

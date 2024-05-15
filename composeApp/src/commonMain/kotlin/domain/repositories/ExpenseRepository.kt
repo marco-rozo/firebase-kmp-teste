@@ -1,11 +1,11 @@
-package domain
+package domain.repositories
 
-import model.Expense
-import model.ExpenseCategory
+import data.model.Expense
+import data.model.ExpenseCategory
 
 interface ExpenseRepository {
 
-    fun getAllExpense(): List<Expense>
+    suspend fun getAllExpense(): List<Expense>
 
    suspend fun addExpense(expense: Expense)
 
