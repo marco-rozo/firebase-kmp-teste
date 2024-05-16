@@ -6,5 +6,5 @@ interface ExpenseDataSource {
     suspend fun addExpense(expense: Expense)
     suspend fun editExpense(expense: Expense)
     suspend fun getCategories(): List<ExpenseCategory>
-    suspend fun deleteExpense(expenseId: Long)
+    suspend fun deleteExpense(expenseId: String)
 }

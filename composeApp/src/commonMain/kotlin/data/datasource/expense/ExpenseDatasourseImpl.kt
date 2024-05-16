@@ -7,16 +7,18 @@ import dev.gitlive.firebase.firestore.firestore
 
 object ExpenseDataSourceImpl : ExpenseDataSource {
     private val firestore = Firebase.firestore
-    private val expenseCollection = firestore.collection("EXPENSE")
+    private val expenseCollection = firestore.collection("EXPENSES")
 
     override suspend fun getAllExpenses(): List<Expense> {
         // Implementação para obter todas as despesas do Firestore
         return try {
             val snapshot = expenseCollection.get()
-            snapshot.documents.map {
-                val expense = it.data(Expense.serializer())
-                expense.copy(category = ExpenseCategory.SNACKS)
-                expense.copy(id = it.id)
+            snapshot.documents.map {document ->
+                val expense = document.data(Expense.serializer())
+                val categoryString = document.get<String>("category")
+
+                expense.copy(category = ExpenseCategory.fromString(categoryString))
+                expense.copy(id = document.id)
             }
         } catch (exception: Exception) {
             println("Error fetching expenses: ${exception.message}")
@@ -48,9 +50,9 @@ object ExpenseDataSourceImpl : ExpenseDataSource {
         return ExpenseCategory.values().toList()
     }
 
-    override suspend fun deleteExpense(expenseId: Long) {
+    override suspend fun deleteExpense(expenseId: String) {
         try {
-            val docRef = expenseCollection.document(expenseId.toString())
+            val docRef = expenseCollection.document(expenseId)
             docRef.delete()
             println("Expense deleted successfully")
         } catch (exception: Exception) {
