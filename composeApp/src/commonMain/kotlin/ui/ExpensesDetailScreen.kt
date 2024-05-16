@@ -1,7 +1,7 @@
 package ui
 
-import model.Expense
-import model.ExpenseCategory
+import data.model.Expense
+import data.model.ExpenseCategory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,6 +1,6 @@
 package ui
 
-import model.Expense
+import data.model.Expense
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.Image
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 //import androidx.compose.foundation.layout.RowScopeInstance.weight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,9 +23,12 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.SentimentDissatisfied
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,6 +42,7 @@ import getColorsTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import presentaction.ExpensesUiState
 import utils.EXPENSE_SCREEN_ERROR_TEST_TAG
 import utils.EXPENSE_SCREEN_ERROR_TEXT_TEST_TAG
@@ -78,12 +83,25 @@ fun ExpensesScreen(
                     ),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "No expenses found, please add your first expense with the + symbol down below",
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.body1
-                    )
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.SentimentDissatisfied,
+                            contentDescription = "Sad Face",
+                            modifier = Modifier.size(48.dp),
+                            tint = Color.Black
+                        )
+                        Spacer(modifier = Modifier.height(16.dp)) // Espaço entre o ícone e o texto
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "No expenses found, click the button in the bottom right corner to add",
+                            fontSize = 22.sp,
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.body1
+                        )
+                    }
                 }
             } else {
                 LazyColumn(
@@ -97,7 +115,7 @@ fun ExpensesScreen(
                             AllExpensesHeader()
                         }
                     }
-                    items(items = uiState.expenses, key = { it.id }) { expense ->
+                    items(items = uiState.expenses, key = { it.id.toString() }) { expense ->
                         SwipeToDeleteContainer(
                             item = expense,
                             onDelete = onDeleteExpense

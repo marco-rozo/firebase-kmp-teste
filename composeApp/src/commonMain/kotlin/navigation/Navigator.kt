@@ -1,11 +1,14 @@
 package navigation
 
+import ExpenseDataSourceImpl
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import data.ExpenseManager
-import data.ExpenseRepoImpl
+import data.datasource.category.CategoryDataSourceImpl
+import data.repositories.category.CategoryRepositoryImpl
+import data.repositories.expense.ExpenseRepositoryImpl
 import getColorsTheme
 import moe.tlaster.precompose.flow.collectAsStateWithLifecycle
 import moe.tlaster.precompose.navigation.NavHost
@@ -22,11 +25,11 @@ fun Navigation(navigator: Navigator) {
     val colors = getColorsTheme()
 
 
-        ExpensesViewModel(ExpenseRepoImpl(ExpenseManager))
+        ExpensesViewModel(ExpenseRepositoryImpl(ExpenseDataSourceImpl), CategoryRepositoryImpl(CategoryDataSourceImpl))
 
 
     val viewModel = viewModel(modelClass = ExpensesViewModel::class) {
-        ExpensesViewModel(ExpenseRepoImpl(ExpenseManager))
+        ExpensesViewModel(ExpenseRepositoryImpl(ExpenseDataSourceImpl), CategoryRepositoryImpl(CategoryDataSourceImpl))
     }
 
 
@@ -45,12 +48,13 @@ fun Navigation(navigator: Navigator) {
         }
 
         scene(route = "/addExpenses/{id}?") { backStackEntry ->
-            val idFromPath = backStackEntry.path<Long>("id")
+            val idFromPath = backStackEntry.path<String>("id")
             val expenseToEditOrAdd = idFromPath?.let { id -> viewModel.getExpenseWithID(id) }
+            val categoryList by viewModel.categories.collectAsState()
 
             ExpensesDetailScreen(
                 expenseToEdit = expenseToEditOrAdd,
-                categoryList = viewModel.getCategories()
+                categoryList = categoryList
             ) { expense ->
                 if (expenseToEditOrAdd == null) {
                     viewModel.addExpense(expense)
